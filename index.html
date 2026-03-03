@@ -976,6 +976,35 @@
       .reveal-next-btn:hover {
         transform: scale(1.06);
       }
+
+      /* VIDEO LOADING SPINNER */
+      .vid-spinner {
+        position: absolute;
+        inset: 0;
+        z-index: 15;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(10, 3, 7, 0.65);
+        transition: opacity 0.4s ease;
+      }
+      .vid-spinner.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .spin-ring {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2.5px solid rgba(233, 30, 140, 0.2);
+        border-top-color: #e91e8c;
+        animation: spin 0.85s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
   <body>
@@ -991,8 +1020,8 @@
       title="Toggle music"
     >
       🔇
-    </button> -->
-    <div class="progress-bar" id="progressBar"></div>
+    </button>
+    <div class="progress-bar" id="progressBar"></div> -->
 
     <!-- ========== SCREEN 0 ========== -->
     <div class="screen active fade-in" id="screen-0">
@@ -1331,7 +1360,7 @@
         </div>
         <div class="chapter-nav">
           <button class="btn btn-primary" onclick="goToScreen('screen-2025')">
-            2025/2026 →</button
+            25/26 →</button
           ><button class="btn btn-ghost" onclick="goToScreen('screen-2023')">
             ← 2023
           </button>
@@ -1397,7 +1426,7 @@
         </div>
         <div class="chapter-nav">
           <button class="btn btn-primary" onclick="goToScreen('screen-who')">
-            Who You Are →</button
+            You →</button
           ><button class="btn btn-ghost" onclick="goToScreen('screen-2024')">
             ← 2024
           </button>
@@ -1564,7 +1593,7 @@
               Absolute beauty. Yinka contest for Miss World na, easy win, make
               we share the money 💕
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <div class="slide">
@@ -1574,7 +1603,7 @@
             <div class="slide-caption-text">
               Na skirt wey I suggest sha, bring in deals
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <div class="slide">
@@ -1585,7 +1614,7 @@
               Do you know that on this day, I couldnt finish that pizza ooo,
               chim😂
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <div class="slide">
@@ -1595,7 +1624,7 @@
             <div class="slide-caption-text">
               You had fun this day oo, even though you want to deny it😂
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <div class="slide">
@@ -1605,7 +1634,7 @@
             <div class="slide-caption-text">
               Forever grateful for your love and presence.
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <div class="slide">
@@ -1615,7 +1644,7 @@
             <div class="slide-caption-text">
               With you, life is a beautiful adventure. 💕
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <div class="slide">
@@ -1625,7 +1654,7 @@
             <div class="slide-caption-text">
               Do you want my eye glasses? Just say the word😂
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <div class="slide">
@@ -1635,7 +1664,7 @@
             <div class="slide-caption-text">
               God when, see as person just dey enjoy herself😂
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <div class="slide">
@@ -1647,7 +1676,7 @@
             <div class="slide-caption-text">
               This one no fit even pretend again, finished woman😭
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <div class="slide">
@@ -1660,7 +1689,7 @@
               If i'm allowed, everyday we would have different kind of dates,
               going outs, and enjoyment😂
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <div class="slide">
@@ -1682,7 +1711,7 @@
             <div class="slide-caption-text">
               You make life infinitely better. 💕
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <div class="slide">
@@ -1695,7 +1724,7 @@
               I see you I see happiness, i see you i see joy, and everything
               else she said😭
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <div class="slide">
@@ -1705,7 +1734,7 @@
             <div class="slide-caption-text">
               You are number 1 in showing up, Yinkaaaaaa💕
             </div>
-            <div class="slide-caption-year">2025 / 2026</div>
+            <div class="slide-caption-year">25/26</div>
           </div>
         </div>
         <!-- LAST SLIDE → FAME -->
@@ -1760,9 +1789,13 @@
               z-index: 1;
             "
             src="tes-2.mp4"
+            preload="auto"
             id="fameVideo"
             onended="triggerReveal('fame')"
           ></video>
+          <div class="vid-spinner" id="fame-spinner">
+            <div class="spin-ring"></div>
+          </div>
           <div class="slide-overlay"></div>
           <div
             class="slide-caption"
@@ -1914,9 +1947,13 @@
               z-index: 1;
             "
             src="tes-3.mp4"
+            preload="auto"
             id="tommyVideo"
             onended="triggerReveal('tommy')"
           ></video>
+          <div class="vid-spinner" id="tommy-spinner">
+            <div class="spin-ring"></div>
+          </div>
           <div class="slide-overlay"></div>
           <div
             class="slide-caption"
@@ -2075,9 +2112,13 @@
               z-index: 1;
             "
             src="tes-5.mp4"
+            preload="auto"
             id="bisolaVideo"
             onended="triggerReveal('bisola')"
           ></video>
+          <div class="vid-spinner" id="bisola-spinner">
+            <div class="spin-ring"></div>
+          </div>
           <div class="slide-overlay"></div>
           <div
             class="slide-caption"
@@ -2236,9 +2277,13 @@
               z-index: 1;
             "
             src="tes-0.mp4"
+            preload="auto"
             id="sammyVideo"
             onended="triggerReveal('sammy')"
           ></video>
+          <div class="vid-spinner" id="sammy-spinner">
+            <div class="spin-ring"></div>
+          </div>
           <div class="slide-overlay"></div>
           <div
             class="slide-caption"
@@ -2586,19 +2631,22 @@
       const audio = document.getElementById("bgMusic");
       const musicBtn = document.getElementById("musicBtn");
       let musicStarted = false,
-        musicPlaying = false;
+        musicPlaying = false,
+        userMutedMusic = false;
 
       function startMusicOnFirstInteraction() {
-        if (musicPlaying || (musicStarted && !musicPlaying)) return;
-        musicStarted = true;
+        if (userMutedMusic || musicPlaying) return;
         if (!audio) return;
-        audio.volume = 0.05;
+        musicStarted = true;
+        audio.volume = 0.1;
         audio
           .play()
           .then(() => {
             musicPlaying = true;
-            musicBtn.textContent = "🎵";
-            musicBtn.classList.add("playing");
+            if (musicBtn) {
+              musicBtn.textContent = "🎵";
+              musicBtn.classList.add("playing");
+            }
           })
           .catch(() => {
             musicStarted = false;
@@ -2612,21 +2660,49 @@
         if (musicPlaying) {
           audio.pause();
           musicPlaying = false;
-          musicBtn.textContent = "🔇";
-          musicBtn.classList.remove("playing");
+          userMutedMusic = true;
+          if (musicBtn) {
+            musicBtn.textContent = "🔇";
+            musicBtn.classList.remove("playing");
+          }
         } else {
+          userMutedMusic = false;
           audio.play();
           musicPlaying = true;
-          musicBtn.textContent = "🎵";
-          musicBtn.classList.add("playing");
+          if (musicBtn) {
+            musicBtn.textContent = "🎵";
+            musicBtn.classList.add("playing");
+          }
         }
       }
-      document.addEventListener("click", () => {
-        if (!musicPlaying) startMusicOnFirstInteraction();
+
+      // Resume music on any interaction — covers taps on video play buttons
+      function resumeMusicIfNeeded() {
+        if (userMutedMusic) return;
+        if (!musicStarted) {
+          startMusicOnFirstInteraction();
+          return;
+        }
+        if (audio && audio.paused && musicPlaying) {
+          audio.play().catch(() => {});
+        }
+      }
+      document.addEventListener("click", resumeMusicIfNeeded);
+      document.addEventListener("touchstart", resumeMusicIfNeeded, {
+        passive: true,
       });
-      document.addEventListener("touchstart", () => {
-        if (!musicPlaying) startMusicOnFirstInteraction();
-      });
+
+      // Auto-recover if browser pauses audio due to video playback interruption
+      if (audio) {
+        audio.addEventListener("pause", () => {
+          if (userMutedMusic) return;
+          setTimeout(() => {
+            if (audio.paused && musicPlaying && !userMutedMusic) {
+              audio.play().catch(() => {});
+            }
+          }, 1000);
+        });
+      }
 
       // ============================
       // VIDEO HELPERS
@@ -2719,6 +2795,8 @@
                 setTimeout(() => card.classList.add("revealed"), 300 + i * 200);
               });
 
+              if (screenId === "screen-who" || screenId === "screen-slideshow")
+                preloadMessageVideos();
               if (screenId === "screen-slideshow") initSlideshow();
               if (screenId === "screen-end") startConfetti();
 
@@ -2741,6 +2819,7 @@
       // ============================
       function updateProgress() {
         const bar = document.getElementById("progressBar");
+        if (!bar) return;
         bar.innerHTML = "";
         const ci = screenOrder.indexOf(currentScreen);
         screenOrder.forEach((id, i) => {
@@ -2927,6 +3006,51 @@
           requestAnimationFrame(draw);
         })();
       }
+
+      // ============================
+      // VIDEO PRELOADING
+      // ============================
+      // Preload message videos as soon as user reaches screen-who
+      // so by the time they hit slideshow → Fame, they're ready
+      const MSG_VIDEOS = ["tes-2.mp4", "tes-3.mp4", "tes-5.mp4", "tes-0.mp4"];
+      let preloadDone = false;
+      function preloadMessageVideos() {
+        if (preloadDone) return;
+        preloadDone = true;
+        MSG_VIDEOS.forEach((src) => {
+          const v = document.createElement("video");
+          v.src = src;
+          v.preload = "auto";
+          v.muted = true;
+          v.load();
+        });
+        console.log("[preload] message videos queued");
+      }
+
+      // ============================
+      // SPINNER HIDE LOGIC
+      // ============================
+      // When a message video can play, hide its spinner
+      const spinnerMap = {
+        fameVideo: "fame-spinner",
+        tommyVideo: "tommy-spinner",
+        bisolaVideo: "bisola-spinner",
+        sammyVideo: "sammy-spinner",
+      };
+      Object.entries(spinnerMap).forEach(([vidId, spinnerId]) => {
+        const v = document.getElementById(vidId);
+        const s = document.getElementById(spinnerId);
+        if (!v || !s) return;
+        const hideSpinner = () => s.classList.add("hidden");
+        if (v.readyState >= 3) {
+          hideSpinner();
+        } else {
+          v.addEventListener("canplay", hideSpinner, { once: true });
+        }
+        // Re-show spinner if video stalls mid-play
+        v.addEventListener("waiting", () => s.classList.remove("hidden"));
+        v.addEventListener("playing", () => s.classList.add("hidden"));
+      });
     </script>
   </body>
 </html>
