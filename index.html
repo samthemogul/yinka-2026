@@ -977,6 +977,13 @@
         transform: scale(1.06);
       }
 
+      /* YOUTUBE EMBED — clean fullscreen, no UI */
+      .yt-player iframe,
+      .yt-player {
+        width: 100% !important;
+        height: 100% !important;
+        pointer-events: none; /* blocks YouTube logo click */
+      }
       /* VIDEO LOADING SPINNER */
       .vid-spinner {
         position: absolute;
@@ -1004,6 +1011,52 @@
         to {
           transform: rotate(360deg);
         }
+      }
+
+      /* ── YOUTUBE EMBEDS ── */
+      /* Container divs fill their parent exactly */
+      .yt-slide,
+      .yt-opening,
+      .yt-inline,
+      .yt-player {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+      /* The iframe YT injects must also fill the container */
+      .yt-slide iframe,
+      .yt-opening iframe,
+      .yt-inline iframe,
+      .yt-player iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+        border: none !important;
+        /* Hide YouTube UI: shift iframe so YT chrome is off-screen.
+           YT Shorts embed is 9:16; we scale it up and center it
+           so the video fills the frame and all chrome is clipped. */
+        transform: scale(1.04);
+      }
+      /* Clip anything that bleeds outside the container */
+      .video-wrapper,
+      .slide-media,
+      .photo-slot {
+        overflow: hidden;
+      }
+      /* Block clicks on YT logo / info cards */
+      .yt-slide::after,
+      .yt-opening::after,
+      .yt-inline::after,
+      .yt-player::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none; /* transparent overlay — blocks touch on YT UI */
       }
     </style>
   </head>
@@ -1035,18 +1088,18 @@
         <h1 class="opening-title">Olayinka <em>Ogunenika</em></h1>
         <p class="opening-sub">Before I start, let's dance first😂.</p>
         <div class="video-wrapper" style="position: relative">
-          <video
-            playsinline
-            src="yinka-starting-vid.mp4"
+          <div
+            class="yt-opening"
             id="openingVideo"
-          ></video>
-          <button
+            data-video-id="twNz6dXqcKA"
+          ></div>
+          <!-- <button
             class="slideshow-play-button"
             id="openingPlayBtn"
             onclick="toggleOpeningVideoPlay()"
           >
             ▶
-          </button>
+          </button> -->
         </div>
         <div style="opacity: 0; animation: fadeIn 1s ease 2s forwards">
           <p
@@ -1164,14 +1217,19 @@
             should have shares there, Yinka.
           </p>
           <div class="photo-slot" style="position: relative">
-            <video playsinline src="2001-vid.mp4" id="video2001"></video
-            ><button
+            <div
+              class="yt-inline"
+              id="video2001"
+              data-video-id="2Rsw4X-LfSU"
+              style="position: absolute; inset: 0; width: 100%; height: 100%"
+            ></div>
+            <!-- <button
               class="slideshow-play-button"
               id="play2001Btn"
               onclick="toggle2001VideoPlay()"
             >
               ▶
-            </button>
+            </button> -->
           </div>
         </div>
         <div class="memory-card revealed" id="mem-benzene">
@@ -1332,14 +1390,19 @@
         <div class="memory-card revealed">
           <div class="memory-tag">📸 JJT Park</div>
           <div class="photo-slot" style="position: relative">
-            <video playsinline src="jjt.mp4" id="videoJJT"></video
-            ><button
+            <div
+              class="yt-inline"
+              id="videoJJT"
+              data-video-id="VcDBDz7KXEo"
+              style="position: absolute; inset: 0; width: 100%; height: 100%"
+            ></div>
+            <!-- <button
               class="slideshow-play-button"
               id="playJJTBtn"
               onclick="toggleJJTVideoPlay()"
             >
               ▶
-            </button>
+            </button> -->
           </div>
           <p class="photo-caption">
             The birthday I'll never forget. You made it unforgettable. 💕
@@ -1550,7 +1613,9 @@
         </button>
 
         <div class="slide active-slide">
-          <div class="slide-media"><video playsinline src="1.mp4"></video></div>
+          <div class="slide-media">
+            <div class="yt-slide" id="yt-1" data-video-id="3GI6SQ5V0DY"></div>
+          </div>
           <div class="slide-overlay"></div>
           <div class="slide-caption">
             <div class="slide-caption-text">
@@ -1560,7 +1625,9 @@
           </div>
         </div>
         <div class="slide">
-          <div class="slide-media"><video playsinline src="2.mp4"></video></div>
+          <div class="slide-media">
+            <div class="yt-slide" id="yt-2" data-video-id="_i9LkN3its0"></div>
+          </div>
           <div class="slide-overlay"></div>
           <div class="slide-caption">
             <div class="slide-caption-text">Our God is good oooooooo😩</div>
@@ -1568,7 +1635,9 @@
           </div>
         </div>
         <div class="slide">
-          <div class="slide-media"><video playsinline src="3.mp4"></video></div>
+          <div class="slide-media">
+            <div class="yt-slide" id="yt-3" data-video-id="WWgEdr2qzjE"></div>
+          </div>
           <div class="slide-overlay"></div>
           <div class="slide-caption">
             <div class="slide-caption-text">
@@ -1578,7 +1647,9 @@
           </div>
         </div>
         <div class="slide">
-          <div class="slide-media"><video playsinline src="4.mp4"></video></div>
+          <div class="slide-media">
+            <div class="yt-slide" id="yt-4" data-video-id="EMZd0XqJMrc"></div>
+          </div>
           <div class="slide-overlay"></div>
           <div class="slide-caption">
             <div class="slide-caption-text">Character ni woman yi😂</div>
@@ -1669,7 +1740,7 @@
         </div>
         <div class="slide">
           <div class="slide-media">
-            <video playsinline src="13.mp4"></video>
+            <div class="yt-slide" id="yt-13" data-video-id="7usI_gyMFX4"></div>
           </div>
           <div class="slide-overlay"></div>
           <div class="slide-caption">
@@ -1681,7 +1752,7 @@
         </div>
         <div class="slide">
           <div class="slide-media">
-            <video playsinline src="14.mp4"></video>
+            <div class="yt-slide" id="yt-14" data-video-id="WoeqnXsVrqQ"></div>
           </div>
           <div class="slide-overlay"></div>
           <div class="slide-caption">
@@ -1704,7 +1775,7 @@
         </div>
         <div class="slide">
           <div class="slide-media">
-            <video playsinline src="17.mp4"></video>
+            <div class="yt-slide" id="yt-17" data-video-id="2td9b3HJZVA"></div>
           </div>
           <div class="slide-overlay"></div>
           <div class="slide-caption">
@@ -1716,7 +1787,7 @@
         </div>
         <div class="slide">
           <div class="slide-media">
-            <video playsinline src="18.mp4"></video>
+            <div class="yt-slide" id="yt-18" data-video-id="xX6YqsM6ITQ"></div>
           </div>
           <div class="slide-overlay"></div>
           <div class="slide-caption">
@@ -1740,7 +1811,7 @@
         <!-- LAST SLIDE → FAME -->
         <div class="slide" data-next="screen-fame">
           <div class="slide-media">
-            <video playsinline src="20.mp4"></video>
+            <div class="yt-slide" id="yt-20" data-video-id="cvv1_l1RfcU"></div>
           </div>
           <div class="slide-overlay"></div>
           <div class="slide-caption">
@@ -1778,21 +1849,19 @@
           Skip ›
         </button>
         <div class="slide active-slide">
-          <video
-            playsinline
+          <div
             style="
               position: absolute;
               inset: 0;
               width: 100%;
               height: 100%;
-              object-fit: cover;
               z-index: 1;
             "
-            src="tes-2.mp4"
-            preload="auto"
             id="fameVideo"
-            onended="triggerReveal('fame')"
-          ></video>
+            class="yt-player"
+            data-video-id="1Lfj_MJPTE4"
+            data-onended="triggerReveal"
+          ></div>
           <div class="vid-spinner" id="fame-spinner">
             <div class="spin-ring"></div>
           </div>
@@ -1936,21 +2005,19 @@
           Skip ›
         </button>
         <div class="slide active-slide">
-          <video
-            playsinline
+          <div
             style="
               position: absolute;
               inset: 0;
               width: 100%;
               height: 100%;
-              object-fit: cover;
               z-index: 1;
             "
-            src="tes-3.mp4"
-            preload="auto"
             id="tommyVideo"
-            onended="triggerReveal('tommy')"
-          ></video>
+            class="yt-player"
+            data-video-id="XFaRSjaj6PY"
+            data-onended="triggerReveal"
+          ></div>
           <div class="vid-spinner" id="tommy-spinner">
             <div class="spin-ring"></div>
           </div>
@@ -2006,7 +2073,7 @@
                     letter-spacing: 0.05em;
                   "
                 >
-                  Your school brother, okwaya!!
+                 Your school brother, okwaya!!
                 </p>
               </div>
             </div>
@@ -2101,21 +2168,19 @@
           Skip ›
         </button>
         <div class="slide active-slide">
-          <video
-            playsinline
+          <div
             style="
               position: absolute;
               inset: 0;
               width: 100%;
               height: 100%;
-              object-fit: cover;
               z-index: 1;
             "
-            src="tes-5.mp4"
-            preload="auto"
             id="bisolaVideo"
-            onended="triggerReveal('bisola')"
-          ></video>
+            class="yt-player"
+            data-video-id="1GRoT4CtKIA"
+            data-onended="triggerReveal"
+          ></div>
           <div class="vid-spinner" id="bisola-spinner">
             <div class="spin-ring"></div>
           </div>
@@ -2172,6 +2237,7 @@
                   "
                 >
                   Your dear sisterrrr😍
+
                 </p>
               </div>
             </div>
@@ -2266,21 +2332,19 @@
           Skip ›
         </button>
         <div class="slide active-slide" id="msg-slide-0">
-          <video
-            playsinline
+          <div
             style="
               position: absolute;
               inset: 0;
               width: 100%;
               height: 100%;
-              object-fit: cover;
               z-index: 1;
             "
-            src="tes-0.mp4"
-            preload="auto"
             id="sammyVideo"
-            onended="triggerReveal('sammy')"
-          ></video>
+            class="yt-player"
+            data-video-id="2Yl85l7MDRc"
+            data-onended="triggerReveal"
+          ></div>
           <div class="vid-spinner" id="sammy-spinner">
             <div class="spin-ring"></div>
           </div>
@@ -2585,6 +2649,126 @@
 
     <script>
       // ============================
+      // YOUTUBE PLAYER SETUP
+      // ============================
+      // Load YouTube IFrame API
+      const ytScript = document.createElement("script");
+      ytScript.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(ytScript);
+
+      const ytPlayers = {};
+      const ytReadyCallbacks = {};
+
+      function onYouTubeIframeAPIReady() {
+        // Init all YT players once API is ready
+        document
+          .querySelectorAll(".yt-player, .yt-slide, .yt-opening, .yt-inline")
+          .forEach((el) => {
+            const id = el.id;
+            const videoId = el.dataset.videoId;
+            const onEndedFn = el.dataset.onended;
+            const mutedIds = new Set([
+              // "3GI6SQ5V0DY",
+              // "_i9LkN3its0",
+              // "WWgEdr2qzjE",
+              // "EMZd0XqJMrc",
+              // "7usI_gyMFX4",
+              // "WoeqnXsVrqQ",
+              // "2td9b3HJZVA",
+              // "xX6YqsM6ITQ",
+              // "cvv1_l1RfcU",
+              // "2Rsw4X-LfSU",
+              // "twNz6dXqcKA",
+              // "VcDBDz7KXEo",
+            ]);
+            ytPlayers[id] = new YT.Player(id, {
+              videoId: videoId,
+              playerVars: {
+                autoplay: 0,
+                controls: 0,
+                disablekb: 1,
+                fs: 0,
+                iv_load_policy: 3,
+                loop: 0,
+                modestbranding: 1,
+                playsinline: 1,
+                rel: 0,
+                showinfo: 0,
+                color: "white",
+                mute: mutedIds.has(videoId) ? 1 : 0,
+                widget_referrer: window.location.href,
+                enablejsapi: 1,
+                origin: window.location.origin || "*",
+              },
+              events: {
+                onReady: (e) => {
+                  // Hide spinner
+                  const spinner =
+                    document.getElementById(
+                      id.replace("Video", "") + "-spinner",
+                    ) || document.getElementById(id + "-spinner");
+                  if (spinner) spinner.classList.add("hidden");
+                  // Force iframe to fill container and strip YT chrome
+                  const iframe = e.target.getIframe();
+                  if (iframe) {
+                    iframe.style.cssText =
+                      "position:absolute;top:0;left:0;width:100%;height:100%;border:none;";
+                    // Muted bg videos: also set transform to cover any letterboxing
+                    if (mutedIds.has(videoId)) {
+                      iframe.style.transform = "scale(1.01)";
+                      iframe.style.transformOrigin = "center center";
+                    }
+                  }
+                  if (ytReadyCallbacks[id]) ytReadyCallbacks[id](e);
+                },
+                onStateChange: (e) => {
+                  // Loop slideshow/bg videos; trigger reveal for message videos
+                  const isMuted = mutedIds.has(videoId);
+                  if (e.data === YT.PlayerState.ENDED) {
+                    if (isMuted) {
+                      // loop bg videos silently
+                      e.target.seekTo(0);
+                      e.target.playVideo();
+                    } else if (onEndedFn) {
+                      window[onEndedFn] &&
+                        window[onEndedFn](id.replace("Video", ""));
+                    }
+                  }
+                  // resume bg music when video ends
+                  if (
+                    e.data === YT.PlayerState.ENDED ||
+                    e.data === YT.PlayerState.PAUSED
+                  ) {
+                    resumeMusicIfNeeded();
+                  }
+                  // pause bg music when video plays
+                  if (e.data === YT.PlayerState.PLAYING) {
+                    if (audio && !audio.paused) audio.pause();
+                  }
+                },
+              },
+            });
+          });
+      }
+
+      function playYTVideo(playerId) {
+        const p = ytPlayers[playerId];
+        if (p && p.seekTo) {
+          p.seekTo(0);
+          p.playVideo();
+        }
+      }
+      function pauseAllYTVideos() {
+        Object.values(ytPlayers).forEach((p) => {
+          try {
+            p.pauseVideo();
+          } catch (e) {}
+        });
+      }
+
+      // pauseAllVideos already handles YT players directly
+
+      // ============================
       // SCREEN ORDER
       // ============================
       const screenOrder = [
@@ -2638,7 +2822,7 @@
         if (userMutedMusic || musicPlaying) return;
         if (!audio) return;
         musicStarted = true;
-        audio.volume = 0.1;
+        audio.volume = 0.05;
         audio
           .play()
           .then(() => {
@@ -2708,47 +2892,61 @@
       // VIDEO HELPERS
       // ============================
       function playVideo(id) {
-        const v = document.getElementById(id);
-        if (v) {
-          v.currentTime = 0;
-          v.play().catch(() => {});
+        const p = ytPlayers[id];
+        if (p && typeof p.seekTo === "function") {
+          try {
+            p.seekTo(0);
+            p.playVideo();
+          } catch (e) {}
         }
       }
       function pauseAllVideos() {
-        document.querySelectorAll("video").forEach((v) => v.pause());
+        // No raw <video> elements remain — all videos are YT embeds
+        // Pause all YT players
+        Object.values(ytPlayers).forEach((p) => {
+          try {
+            if (p && typeof p.pauseVideo === "function") p.pauseVideo();
+          } catch (e) {}
+        });
       }
       function toggleOpeningVideoPlay() {
-        const v = document.getElementById("openingVideo"),
+        const p = ytPlayers["openingVideo"],
           btn = document.getElementById("openingPlayBtn");
-        if (!v || !btn) return;
-        v.paused
-          ? v
-              .play()
-              .then(() => (btn.textContent = "⏸"))
-              .catch(() => {})
-          : (v.pause(), (btn.textContent = "▶"));
+        if (!p || !btn) return;
+        const state = p.getPlayerState ? p.getPlayerState() : -1;
+        if (state === 1) {
+          p.pauseVideo();
+          btn.textContent = "▶";
+        } else {
+          p.playVideo();
+          btn.textContent = "⏸";
+        }
       }
       function toggle2001VideoPlay() {
-        const v = document.getElementById("video2001"),
+        const p = ytPlayers["video2001"],
           btn = document.getElementById("play2001Btn");
-        if (!v || !btn) return;
-        v.paused
-          ? v
-              .play()
-              .then(() => (btn.textContent = "⏸"))
-              .catch(() => {})
-          : (v.pause(), (btn.textContent = "▶"));
+        if (!p || !btn) return;
+        const state = p.getPlayerState ? p.getPlayerState() : -1;
+        if (state === 1) {
+          p.pauseVideo();
+          btn.textContent = "▶";
+        } else {
+          p.playVideo();
+          btn.textContent = "⏸";
+        }
       }
       function toggleJJTVideoPlay() {
-        const v = document.getElementById("videoJJT"),
+        const p = ytPlayers["videoJJT"],
           btn = document.getElementById("playJJTBtn");
-        if (!v || !btn) return;
-        v.paused
-          ? v
-              .play()
-              .then(() => (btn.textContent = "⏸"))
-              .catch(() => {})
-          : (v.pause(), (btn.textContent = "▶"));
+        if (!p || !btn) return;
+        const state = p.getPlayerState ? p.getPlayerState() : -1;
+        if (state === 1) {
+          p.pauseVideo();
+          btn.textContent = "▶";
+        } else {
+          p.playVideo();
+          btn.textContent = "⏸";
+        }
       }
 
       // ============================
@@ -2866,8 +3064,14 @@
         currentSlideIndex = 0;
         slides.forEach((s) => s.classList.remove("active-slide", "exit-slide"));
         slides[0].classList.add("active-slide");
-        const v = slides[0].querySelector("video");
-        if (v) v.play().catch(() => {});
+        const firstDiv = slides[0]
+          ? slides[0].querySelector("[data-video-id]")
+          : null;
+        if (firstDiv && ytPlayers[firstDiv.id]) {
+          try {
+            ytPlayers[firstDiv.id].playVideo();
+          } catch (e) {}
+        }
       }
 
       function goToSlide(index) {
@@ -2879,8 +3083,14 @@
           return;
         }
 
-        const cv = slides[currentSlideIndex].querySelector("video");
-        if (cv) cv.pause();
+        const cvDiv = slides[currentSlideIndex]
+          ? slides[currentSlideIndex].querySelector("[data-video-id]")
+          : null;
+        if (cvDiv && ytPlayers[cvDiv.id]) {
+          try {
+            ytPlayers[cvDiv.id].pauseVideo();
+          } catch (e) {}
+        }
         slides[currentSlideIndex].classList.remove("active-slide");
         slides[currentSlideIndex].classList.add("exit-slide");
         setTimeout(
@@ -2896,8 +3106,15 @@
         currentSlideIndex = index;
         slides[index].classList.add("active-slide");
         if (dots[index]) dots[index].classList.add("active-dot");
-        const nv = slides[index].querySelector("video");
-        if (nv) nv.play().catch(() => {});
+        const nextDiv = slides[index]
+          ? slides[index].querySelector("[data-video-id]")
+          : null;
+        if (nextDiv && ytPlayers[nextDiv.id]) {
+          try {
+            ytPlayers[nextDiv.id].seekTo(0);
+            ytPlayers[nextDiv.id].playVideo();
+          } catch (e) {}
+        }
       }
 
       function goToPrevSlide() {
