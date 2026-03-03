@@ -2073,7 +2073,7 @@
                     letter-spacing: 0.05em;
                   "
                 >
-                 Your school brother, okwaya!!
+                  Your school brother, okwaya!!
                 </p>
               </div>
             </div>
@@ -2237,7 +2237,6 @@
                   "
                 >
                   Your dear sisterrrr😍
-
                 </p>
               </div>
             </div>
@@ -2288,7 +2287,9 @@
                   line-height: 1.7;
                 "
               >
-                She says her face is not fine oo, she wan go do make up before she record video😭 She was the "icing on the cake" I was talking about yesterday😂.
+                She says her face is not fine oo, she wan go do make up before
+                she record video😭 She was the "icing on the cake" I was talking
+                about yesterday😂.
               </p>
               <div class="reveal-btn-row">
                 <button
@@ -2819,14 +2820,30 @@
         userMutedMusic = false;
 
       function startMusicOnFirstInteraction() {
-        if (userMutedMusic || musicPlaying) return;
-        if (!audio) return;
+        if (userMutedMusic || musicPlaying || !audio) return;
         musicStarted = true;
-        audio.volume = 0.05;
+
+        // Web Audio GainNode — the only reliable way to set low volume on mobile Chrome
+        try {
+          if (!window._audioCtx) {
+            window._audioCtx = new (
+              window.AudioContext || window.webkitAudioContext
+            )();
+            const src = window._audioCtx.createMediaElementSource(audio);
+            window._gainNode = window._audioCtx.createGain();
+            window._gainNode.gain.value = 0.07;
+            src.connect(window._gainNode);
+            window._gainNode.connect(window._audioCtx.destination);
+          }
+          if (window._audioCtx.state === "suspended") window._audioCtx.resume();
+        } catch (e) {}
+
+        audio.volume = 1; // gain node handles the actual level
         audio
           .play()
           .then(() => {
             musicPlaying = true;
+            if (window._gainNode) window._gainNode.gain.value = 0.07;
             if (musicBtn) {
               musicBtn.textContent = "🎵";
               musicBtn.classList.add("playing");
