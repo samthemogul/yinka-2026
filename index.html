@@ -1055,8 +1055,9 @@
         content: "";
         position: absolute;
         inset: 0;
-        z-index: 2;
-        pointer-events: none; /* transparent overlay — blocks touch on YT UI */
+        z-index: 10;
+        pointer-events: auto; /* intercepts ALL taps — prevents YT iframe navigating page */
+        background: transparent;
       }
     </style>
   </head>
@@ -2073,7 +2074,7 @@
                     letter-spacing: 0.05em;
                   "
                 >
-                  Your school brother, okwaya!!
+                 Your school brother, okwaya!!
                 </p>
               </div>
             </div>
@@ -2237,6 +2238,7 @@
                   "
                 >
                   Your dear sisterrrr😍
+
                 </p>
               </div>
             </div>
@@ -2287,9 +2289,7 @@
                   line-height: 1.7;
                 "
               >
-                She says her face is not fine oo, she wan go do make up before
-                she record video😭 She was the "icing on the cake" I was talking
-                about yesterday😂.
+                She says her face is not fine oo, she wan go do make up before she record video😭 She was the "icing on the cake" I was talking about yesterday😂.
               </p>
               <div class="reveal-btn-row">
                 <button
@@ -2653,10 +2653,6 @@
       // YOUTUBE PLAYER SETUP
       // ============================
       // Load YouTube IFrame API
-      const ytScript = document.createElement("script");
-      ytScript.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(ytScript);
-
       const ytPlayers = {};
       const ytReadyCallbacks = {};
 
@@ -2699,7 +2695,7 @@
                 mute: mutedIds.has(videoId) ? 1 : 0,
                 widget_referrer: window.location.href,
                 enablejsapi: 1,
-                origin: window.location.origin || "*",
+                origin: (window.location.origin && window.location.origin !== "null") ? window.location.origin : "https://www.youtube.com",
               },
               events: {
                 onReady: (e) => {
@@ -2719,6 +2715,7 @@
                       iframe.style.transform = "scale(1.01)";
                       iframe.style.transformOrigin = "center center";
                     }
+
                   }
                   if (ytReadyCallbacks[id]) ytReadyCallbacks[id](e);
                 },
@@ -2726,13 +2723,13 @@
                   // Loop slideshow/bg videos; trigger reveal for message videos
                   const isMuted = mutedIds.has(videoId);
                   if (e.data === YT.PlayerState.ENDED) {
-                    if (isMuted) {
-                      // loop bg videos silently
+                    if (onEndedFn) {
+                      // Message video ended — trigger reveal
+                      window[onEndedFn] && window[onEndedFn](id.replace("Video", ""));
+                    } else {
+                      // Slideshow / opening / inline — loop it
                       e.target.seekTo(0);
                       e.target.playVideo();
-                    } else if (onEndedFn) {
-                      window[onEndedFn] &&
-                        window[onEndedFn](id.replace("Video", ""));
                     }
                   }
                   // resume bg music when video ends
@@ -2820,30 +2817,14 @@
         userMutedMusic = false;
 
       function startMusicOnFirstInteraction() {
-        if (userMutedMusic || musicPlaying || !audio) return;
+        if (userMutedMusic || musicPlaying) return;
+        if (!audio) return;
         musicStarted = true;
-
-        // Web Audio GainNode — the only reliable way to set low volume on mobile Chrome
-        try {
-          if (!window._audioCtx) {
-            window._audioCtx = new (
-              window.AudioContext || window.webkitAudioContext
-            )();
-            const src = window._audioCtx.createMediaElementSource(audio);
-            window._gainNode = window._audioCtx.createGain();
-            window._gainNode.gain.value = 0.07;
-            src.connect(window._gainNode);
-            window._gainNode.connect(window._audioCtx.destination);
-          }
-          if (window._audioCtx.state === "suspended") window._audioCtx.resume();
-        } catch (e) {}
-
-        audio.volume = 1; // gain node handles the actual level
+        
         audio
           .play()
           .then(() => {
             musicPlaying = true;
-            if (window._gainNode) window._gainNode.gain.value = 0.07;
             if (musicBtn) {
               musicBtn.textContent = "🎵";
               musicBtn.classList.add("playing");
@@ -2852,6 +2833,7 @@
           .catch(() => {
             musicStarted = false;
           });
+          audio.volume = 0.05;
       }
       function toggleMusic() {
         if (!musicStarted) {
@@ -3066,28 +3048,36 @@
       // ============================
       let currentSlideIndex = 0;
 
+      let slideshowInited = false;
       function initSlideshow() {
         const slides = document.querySelectorAll("#screen-slideshow .slide");
         const prog = document.getElementById("slideProgress");
-        prog.innerHTML = "";
-        slides.forEach((_, i) => {
-          const dot = document.createElement("div");
-          dot.className = "slide-dot" + (i === 0 ? " active-dot" : "");
-          const fill = document.createElement("div");
-          fill.className = "slide-dot-fill";
-          dot.appendChild(fill);
-          prog.appendChild(dot);
-        });
-        currentSlideIndex = 0;
-        slides.forEach((s) => s.classList.remove("active-slide", "exit-slide"));
-        slides[0].classList.add("active-slide");
-        const firstDiv = slides[0]
-          ? slides[0].querySelector("[data-video-id]")
-          : null;
-        if (firstDiv && ytPlayers[firstDiv.id]) {
-          try {
-            ytPlayers[firstDiv.id].playVideo();
-          } catch (e) {}
+
+        if (!slideshowInited) {
+          // First visit only — build dots and activate first slide
+          prog.innerHTML = "";
+          slides.forEach((_, i) => {
+            const dot = document.createElement("div");
+            dot.className = "slide-dot" + (i === 0 ? " active-dot" : "");
+            const fill = document.createElement("div");
+            fill.className = "slide-dot-fill";
+            dot.appendChild(fill);
+            prog.appendChild(dot);
+          });
+          currentSlideIndex = 0;
+          slides.forEach((s) => s.classList.remove("active-slide", "exit-slide"));
+          slides[0].classList.add("active-slide");
+          slideshowInited = true;
+          // Do NOT auto-play here — wait for user's first tap (next/prev)
+          // Programmatic playVideo() on entry causes mobile Chrome to reload the page
+        } else {
+          // Returning to slideshow — just resume current slide video
+          const curDiv = slides[currentSlideIndex]
+            ? slides[currentSlideIndex].querySelector("[data-video-id]")
+            : null;
+          if (curDiv && ytPlayers[curDiv.id]) {
+            try { ytPlayers[curDiv.id].playVideo(); } catch(e) {}
+          }
         }
       }
 
@@ -3286,5 +3276,6 @@
         v.addEventListener("playing", () => s.classList.add("hidden"));
       });
     </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
   </body>
 </html>
