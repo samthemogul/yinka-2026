@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday, Yinka 🎀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+    <!-- <audio id="bgMusic" loop preload="auto">
+      <source src="counting-my-blessings.mp3" type="audio/mpeg" />
+    </audio>
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Toggle music">🔇</button> -->
+
+    <div class="screen chapter-screen active" id="screen-2024">
+      <div class="chapter-header">
+        <div class="chapter-year">2024</div>
+        <div class="chapter-label">Chapter Four</div>
+        <h2 class="chapter-title">You Carried <em>My Matter</em></h2>
+      </div>
+      <div class="chapter-body">
+        <div class="memory-card revealed">
+          <div class="memory-tag">🎂 My Birthday</div>
+          <p class="memory-text">
+            This one was even crazy. I had given up. No money, no plans. The
+            plan was to buy bread and beans, eat and sleep.<br /><br />Then you
+            called that morning I can never forget.
+            <strong>"Sammy, dress up and meet me at Chicken Republic."</strong
+            ><br /><br />And from there — Chicken Republic to JJT Park, Ikeja.
+            You showed me crazy dance moves. I just dey catch your snap anyhow.
+            One of them is what you saw in the beginning. You showed me what it
+            means to have someone who
+            <em>carries your matter like Oshuka.</em> That was one of my
+            happiest birthdays ever, my love, you made it happen. I will never
+            forget it. God bless you
+          </p>
+        </div>
+        <div class="memory-card revealed">
+          <div class="memory-tag">📸 JJT Park</div>
+          <div class="photo-slot" style="position:relative;">
+            <div class="yt-cover" style="position:absolute;inset:0;width:100%;height:100%;overflow:hidden;">
+              <div class="yt-inline" id="videoJJT" data-video-id="VcDBDz7KXEo" style="position:absolute;inset:0;width:100%;height:100%;"></div>
+              <button id="btn_videoJJT" onclick="togglePlay_videoJJT()" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20;background:rgba(194,24,91,0.85);border:none;border-radius:50%;width:72px;height:72px;font-size:1.8rem;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.3s;">▶</button>
+            </div>
+          </div>
+          <p class="photo-caption">The birthday I'll never forget. You made it unforgettable. 💕</p>
+        </div>
+        <div class="memory-card revealed" id="mem-fights">
+          <div class="memory-tag">⚡ Real Talk</div>
+          <p class="memory-text">
+            We also had our most fights this year. I'm not going to pretend
+            otherwise.<br /><br />But here's what I know:
+            <strong>the best friendships are not the ones that never fight. They're
+              the ones that survive the fights.</strong
+            ><br /><br />Ours survived. You remember that one where you reported
+            me to everybody, including your mum...heiiii, I was really scared
+            then sha, but beneath it all, I just knew that we would be fine.
+          </p>
+        </div>
+        <div class="chapter-nav">
+          <button class="btn btn-primary" onclick="window.location.href='2025.html'">25/26 →</button>
+          <button class="btn btn-ghost" onclick="window.location.href='2023.html'">← 2023</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function goToScreen(screenId) {
+        const map = {'screen-0':'index.html','screen-prologue':'prologue.html','screen-2021':'2021.html','screen-2022':'2022.html','screen-2023':'2023.html','screen-2024':'2024.html','screen-2025':'2025.html','screen-who':'who.html','screen-slideshow':'slideshow.html','screen-fame':'fame.html','screen-tommy':'tommy.html','screen-bisola':'bisola.html','screen-messages':'sammy.html','screen-letter':'letter.html','screen-end':'end.html'};
+        if (map[screenId]) window.location.href = map[screenId];
+      }
+      const audio = document.getElementById('bgMusic');
+      const musicBtn = document.getElementById('musicBtn');
+      let musicPlaying = false, userMutedMusic = false;
+      function setupGain() {
+        if (window._audioCtx || !audio) return;
+        try {
+          window._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const src = window._audioCtx.createMediaElementSource(audio);
+          window._gainNode = window._audioCtx.createGain();
+          window._gainNode.gain.value = 0.07;
+          src.connect(window._gainNode); window._gainNode.connect(window._audioCtx.destination);
+        } catch(e) {}
+      }
+      function startMusic() {
+        if (userMutedMusic || musicPlaying || !audio) return;
+        setupGain();
+        if (window._audioCtx && window._audioCtx.state === 'suspended') window._audioCtx.resume();
+        audio.volume = 1;
+        audio.play().then(() => {
+          musicPlaying = true;
+          if (window._gainNode) window._gainNode.gain.value = 0.07;
+          if (musicBtn) { musicBtn.textContent = '🎵'; musicBtn.classList.add('playing'); }
+        }).catch(() => {});
+      }
+      function toggleMusic() {
+        if (musicPlaying) {
+          audio.pause(); musicPlaying = false; userMutedMusic = true;
+          if (musicBtn) { musicBtn.textContent = '🔇'; musicBtn.classList.remove('playing'); }
+        } else { userMutedMusic = false; startMusic(); }
+      }
+      document.addEventListener('click',      () => { if (!userMutedMusic) startMusic(); });
+      document.addEventListener('touchstart', () => { if (!userMutedMusic) startMusic(); }, { passive: true });
+      const cursor = document.getElementById('cursor');
+      const ring = document.getElementById('cursorRing');
+      if (cursor && ring) {
+        let mx=0,my=0,rx=0,ry=0;
+        document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx-6+'px'; cursor.style.top=my-6+'px'; });
+        (function loop(){ rx+=(mx-rx-18)*0.12; ry+=(my-ry-18)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+      }
+      function createPetal() {
+        const p = document.createElement('div'); p.className = 'petal';
+        p.style.left = Math.random()*100+'vw';
+        const dur=6+Math.random()*8, delay=Math.random()*5;
+        p.style.animation = `petalFall ${dur}s ${delay}s linear infinite`;
+        document.body.appendChild(p); setTimeout(() => p.remove(), (dur+delay)*1000+1000);
+      }
+      setInterval(createPetal, 2000);
+
+      const ytPlayers = {};
+      let _playing = false;
+
+      function onYouTubeIframeAPIReady() {
+        ytPlayers['videoJJT'] = new YT.Player('videoJJT', {
+          videoId: 'VcDBDz7KXEo',
+          playerVars: {
+            autoplay: 0, mute: 0, controls: 0, disablekb: 1, fs: 0,
+            iv_load_policy: 3, modestbranding: 1, playsinline: 1, rel: 0,
+            showinfo: 0, enablejsapi: 1,
+            origin: (window.location.origin && window.location.origin !== 'null')
+              ? window.location.origin : 'https://www.youtube.com',
+          },
+          events: {
+            onReady: (e) => {
+              const iframe = e.target.getIframe();
+              if (iframe) iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;transform:scale(1.01);transform-origin:center center;';
+            },
+            onStateChange: (e) => {
+              if (e.data === YT.PlayerState.ENDED) {
+                try { e.target.seekTo(0); } catch(ex) {}
+                _playing = false;
+                const btn = document.getElementById('btn_videoJJT');
+                if (btn) btn.style.opacity = '1';
+              }
+            },
+          },
+        });
+      }
+
+      function togglePlay_videoJJT() {
+        const p = ytPlayers['videoJJT'];
+        if (!p) return;
+        const btn = document.getElementById('btn_videoJJT');
+        if (!_playing) {
+          try { p.unMute(); p.setVolume(100); p.playVideo(); } catch(e) {}
+          _playing = true;
+          if (btn) btn.style.opacity = '0';
+        } else {
+          try { p.pauseVideo(); } catch(e) {}
+          _playing = false;
+          if (btn) btn.style.opacity = '1';
+        }
+      }
+    </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+  </body>
+</html>

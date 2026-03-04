@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday, Yinka 🎀</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  
+<body>
+
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+    <audio id="bgMusic" loop preload="auto">
+      <source src="counting-my-blessings.mp3" type="audio/mpeg" />
+    </audio>
+    <!-- <button
+      class="music-btn"
+      id="musicBtn"
+      onclick="toggleMusic()"
+      title="Toggle music"
+    >
+      🔇
+    </button>
+    <div class="progress-bar" id="progressBar"></div> -->
+
+        <div
+      class= active"screen"
+      id="screen-letter"
+      style="
+        background: var(--pink-pale);
+        color: var(--text);
+        padding: 60px 24px;
+        min-height: 100vh;
+        
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div class="letter-paper">
+        <div class="letter-date">
+          March 4th, 2026 — Happy Birthday, Mallam 🎀
+        </div>
+        <div class="letter-greeting">Dear Yinka,</div>
+        <div class="letter-body">
+          <p>
+            I've been thinking about how to say all i want to say. And I figured
+            — the best way was to just take you through it all first, and then
+            say what I actually want to say at the end, or at least the little I
+            can.
+          </p>
+          <p>
+            You showed up in my life like something I prayed for before I even
+            knew what to pray for. From the day i first set eyes on you mehn —
+            where I was just some kid asking "who be this girl?" — to right now,
+            today, you've been one of the greatest things that has ever happened
+            to me.
+          </p>
+          <p>
+            I know we've had fights. I know there have been moments where things
+            were heavy. But I want you to know that through all of it — the
+            restaurants, the late nights, the tutorials, the big wins, the
+            losses, the birthday that went from bread and beans to JJT Park, the
+            painful results, the friendship chaos — I have not once doubted that
+            you are my person. I always tell my other friends and they know, I
+            would ALWAYS choose you everyday anytime.
+          </p>
+          <p>
+            You pulled me back when I was ready to fall. You stayed when staying
+            wasn't easy. You believed in me when I didn't. You haven't failed to
+            be real with me. Thats one thing I can always count on. That's not a
+            small thing, Yinka. That's everything. God bless you for always
+            being there for me.
+          </p>
+          <p>
+            So here is my promise, on your birthday:
+            <strong
+              >Whatever comes next — the challenges, the new chapters, the
+              uncertain things — we will surmount them. Together. The way we
+              always have.</strong
+            >
+          </p>
+          <p>
+            You deserve every good thing. All the ice cream. All the pink
+            everything. All the money, All the first classes. All of it. All the
+            happiness in the whole wide world. All the love, all the peace. I
+            really cannot wait to see you achieve all your dreams. I cannot wait
+            to be there cheering you on, just like I always have been, just like
+            I always will be.
+          </p>
+          <p>
+            Happy Birthday, Mi amor, my Achalugo, My number 1 human being, the
+            very best person that I have. 🌸🌸🌸🌸🌸<br />I'm so glad you exist,
+            and I love you so so so so so so so so so so so so so so so so
+            freaking much.😭❤️
+          </p>
+          <p
+            style="
+              font-size: 0.85rem;
+              color: rgba(100, 30, 60, 0.4);
+              font-style: italic;
+            "
+          >
+            P.S — The dancing video at the beginning? That stays with me
+            forever, I wont lose it again. 😂❤️
+          </p>
+        </div>
+        <div class="letter-sign">— Sammy <span class="heartbeat">💕</span></div>
+      </div>
+      <div
+        style="
+          margin-top: 32px;
+          text-align: center;
+          opacity: 0;
+          animation: fadeIn 1s ease 1.5s forwards;
+        "
+      >
+        <button class="btn btn-primary" onclick="window.location.href='end.html'">
+          One last thing 🎉
+        </button>
+      </div>
+    </div>
+
+    <script>
+
+      // ── NAVIGATION ───────────────────────────────────────────────────────
+      function goToScreen(screenId) {
+        const map = {
+          'screen-0':         'index.html',
+          'screen-prologue':  'prologue.html',
+          'screen-2021':      '2021.html',
+          'screen-2022':      '2022.html',
+          'screen-2023':      '2023.html',
+          'screen-2024':      '2024.html',
+          'screen-2025':      '2025.html',
+          'screen-who':       'who.html',
+          'screen-slideshow': 'slideshow.html',
+          'screen-fame':      'fame.html',
+          'screen-tommy':     'tommy.html',
+          'screen-bisola':    'bisola.html',
+          'screen-messages':  'sammy.html',
+          'screen-letter':    'letter.html',
+          'screen-end':       'end.html',
+        };
+        if (map[screenId]) window.location.href = map[screenId];
+      }
+
+
+      // ── BACKGROUND MUSIC ─────────────────────────────────────────────────
+      const audio = document.getElementById('bgMusic');
+      const musicBtn = document.getElementById('musicBtn');
+      let musicPlaying = false, userMutedMusic = false;
+
+      function setupGain() {
+        if (window._audioCtx || !audio) return;
+        try {
+          window._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const src = window._audioCtx.createMediaElementSource(audio);
+          window._gainNode = window._audioCtx.createGain();
+          window._gainNode.gain.value = 0.07;
+          src.connect(window._gainNode);
+          window._gainNode.connect(window._audioCtx.destination);
+        } catch(e) {}
+      }
+      function startMusic() {
+        if (userMutedMusic || musicPlaying || !audio) return;
+        setupGain();
+        if (window._audioCtx && window._audioCtx.state === 'suspended') window._audioCtx.resume();
+        audio.volume = 1;
+        audio.play().then(() => {
+          musicPlaying = true;
+          if (window._gainNode) window._gainNode.gain.value = 0.07;
+          if (musicBtn) { musicBtn.textContent = '🎵'; musicBtn.classList.add('playing'); }
+        }).catch(() => {});
+      }
+      function toggleMusic() {
+        if (musicPlaying) {
+          audio.pause(); musicPlaying = false; userMutedMusic = true;
+          if (musicBtn) { musicBtn.textContent = '🔇'; musicBtn.classList.remove('playing'); }
+        } else {
+          userMutedMusic = false; startMusic();
+        }
+      }
+      document.addEventListener('click',      () => { if (!userMutedMusic) startMusic(); });
+      document.addEventListener('touchstart', () => { if (!userMutedMusic) startMusic(); }, { passive: true });
+
+
+      // ── CURSOR ───────────────────────────────────────────────────────────
+      const cursor = document.getElementById('cursor');
+      const ring   = document.getElementById('cursorRing');
+      if (cursor && ring) {
+        let mx=0,my=0,rx=0,ry=0;
+        document.addEventListener('mousemove', e => {
+          mx=e.clientX; my=e.clientY;
+          cursor.style.left = mx-6+'px'; cursor.style.top = my-6+'px';
+        });
+        (function animateRing(){
+          rx+=(mx-rx-18)*0.12; ry+=(my-ry-18)*0.12;
+          ring.style.left = rx+'px'; ring.style.top = ry+'px';
+          requestAnimationFrame(animateRing);
+        })();
+      }
+
+
+      // ── PETALS ───────────────────────────────────────────────────────────
+      function createPetal() {
+        const p = document.createElement('div');
+        p.className = 'petal';
+        p.style.left = Math.random()*100+'vw';
+        const dur = 6+Math.random()*8, delay = Math.random()*5;
+        p.style.animation = `petalFall ${dur}s ${delay}s linear infinite`;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), (dur+delay)*1000+1000);
+      }
+      setInterval(createPetal, 2000);
+
+    </script>
+  </body>
+</html>

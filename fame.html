@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday, Yinka 🎀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+    <!-- <audio id="bgMusic" loop preload="auto">
+      <source src="counting-my-blessings.mp3" type="audio/mpeg" />
+    </audio>
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Toggle music">🔇</button> -->
+
+    <div class="active" id="screen-fame">
+      <div class="slideshow-container">
+        <button class="slideshow-skip" onclick="triggerReveal()">Skip ›</button>
+        <div class="slide active-slide">
+          <div class="yt-cover" style="position:absolute;inset:0;width:100%;height:100%;overflow:hidden;">
+            <div id="fameVideo" class="yt-player" data-video-id="1Lfj_MJPTE4"
+              style="position:absolute;inset:0;width:100%;height:100%;z-index:1;"></div>
+          </div>
+          <div class="slide-overlay"></div>
+          
+          <div class="slide-caption" style="bottom: 80px; text-align: left; padding: 0 32px">
+            <div style="display:inline-flex;align-items:center;gap:14px;background:rgba(0,0,0,0.5);backdrop-filter:blur(16px);border:1px solid rgba(176,190,197,0.25);border-radius:100px;padding:10px 20px 10px 10px;">
+              <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#1976d2,#1565c0);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">⭐</div>
+              <div>
+                <p style="font-family:'Playfair Display',serif;font-size:1.05rem;color:white;font-weight:700;line-height:1;">Fame</p>
+                <p style="font-size:0.65rem;color:rgba(255,255,255,0.45);margin-top:3px;letter-spacing:0.05em;">Your fellow workaholic and friend.</p>
+              </div>
+            </div>
+          </div>
+          <button class="slideshow-nav-button prev" onclick="window.location.href='slideshow.html'" style="z-index:5;">‹</button>
+          <button class="slideshow-nav-button next" onclick="triggerReveal()" style="z-index:5;">›</button>
+          <div class="reveal-overlay" id="reveal-overlay">
+            <div class="reveal-inner" id="reveal-inner">
+              <div style="font-size:3.5rem;margin-bottom:20px;animation:heartbeat 1.5s ease-in-out infinite;">🎀</div>
+              <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,3vw,1.3rem);color:rgba(255,255,255,0.55);margin-bottom:32px;line-height:1.7;">
+                I told this boy to be funny ooo, he come run mad😂.
+              </p>
+              <div class="reveal-btn-row">
+                <button class="reveal-next-btn" onclick="window.location.href='tommy.html'"
+                  style="background:linear-gradient(135deg,#1976d2,#1565c0);box-shadow:0 0 60px rgba(0,0,0,0.4);">
+                  Next → Tommy
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function goToScreen(screenId) {
+        const map = {'screen-0':'index.html','screen-prologue':'prologue.html','screen-2021':'2021.html','screen-2022':'2022.html','screen-2023':'2023.html','screen-2024':'2024.html','screen-2025':'2025.html','screen-who':'who.html','screen-slideshow':'slideshow.html','screen-fame':'fame.html','screen-tommy':'tommy.html','screen-bisola':'bisola.html','screen-messages':'sammy.html','screen-letter':'letter.html','screen-end':'end.html'};
+        if (map[screenId]) window.location.href = map[screenId];
+      }
+      const audio = document.getElementById('bgMusic');
+      const musicBtn = document.getElementById('musicBtn');
+      let musicPlaying = false, userMutedMusic = false;
+      function setupGain() {
+        if (window._audioCtx || !audio) return;
+        try {
+          window._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const src = window._audioCtx.createMediaElementSource(audio);
+          window._gainNode = window._audioCtx.createGain();
+          window._gainNode.gain.value = 0.07;
+          src.connect(window._gainNode); window._gainNode.connect(window._audioCtx.destination);
+        } catch(e) {}
+      }
+      function startMusic() {
+        if (userMutedMusic || musicPlaying || !audio) return;
+        setupGain();
+        if (window._audioCtx && window._audioCtx.state === 'suspended') window._audioCtx.resume();
+        audio.volume = 1;
+        audio.play().then(() => {
+          musicPlaying = true;
+          if (window._gainNode) window._gainNode.gain.value = 0.07;
+          if (musicBtn) { musicBtn.textContent = '🎵'; musicBtn.classList.add('playing'); }
+        }).catch(() => {});
+      }
+      function toggleMusic() {
+        if (musicPlaying) {
+          audio.pause(); musicPlaying = false; userMutedMusic = true;
+          if (musicBtn) { musicBtn.textContent = '🔇'; musicBtn.classList.remove('playing'); }
+        } else { userMutedMusic = false; startMusic(); }
+      }
+      document.addEventListener('click',      () => { if (!userMutedMusic) startMusic(); });
+      document.addEventListener('touchstart', () => { if (!userMutedMusic) startMusic(); }, { passive: true });
+      const cursor = document.getElementById('cursor');
+      const ring = document.getElementById('cursorRing');
+      if (cursor && ring) {
+        let mx=0,my=0,rx=0,ry=0;
+        document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx-6+'px'; cursor.style.top=my-6+'px'; });
+        (function loop(){ rx+=(mx-rx-18)*0.12; ry+=(my-ry-18)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+      }
+      function createPetal() {
+        const p = document.createElement('div'); p.className = 'petal';
+        p.style.left = Math.random()*100+'vw';
+        const dur=6+Math.random()*8, delay=Math.random()*5;
+        p.style.animation = `petalFall ${dur}s ${delay}s linear infinite`;
+        document.body.appendChild(p); setTimeout(() => p.remove(), (dur+delay)*1000+1000);
+      }
+      setInterval(createPetal, 2000);
+
+      const ytPlayers = {};
+
+      function onYouTubeIframeAPIReady() {
+        if (!document.getElementById('fameVideo')) return;
+        ytPlayers['fameVideo'] = new YT.Player('fameVideo', {
+          videoId: '1Lfj_MJPTE4',
+          playerVars: {
+            autoplay: 1, mute: 1, controls: 0, disablekb: 1, fs: 0,
+            iv_load_policy: 3, modestbranding: 1, playsinline: 1, rel: 0,
+            showinfo: 0, enablejsapi: 1,
+            origin: (window.location.origin && window.location.origin !== 'null')
+              ? window.location.origin : 'https://www.youtube.com',
+          },
+          events: {
+            onReady: (e) => {
+              const iframe = e.target.getIframe();
+              if (iframe) iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;transform:scale(1.01);transform-origin:center center;';
+              try { e.target.playVideo(); } catch(ex) {}
+            },
+            onStateChange: (e) => {
+              if (e.data === YT.PlayerState.PLAYING) {
+                try { e.target.unMute(); e.target.setVolume(100); } catch(ex) {}
+                if (audio && !audio.paused) { audio.pause(); musicPlaying = false; }
+              }
+              if (e.data === YT.PlayerState.ENDED) {
+                triggerReveal();
+                if (!userMutedMusic) startMusic();
+              }
+            },
+          },
+        });
+      }
+
+      function triggerReveal() {
+        const overlay = document.getElementById('reveal-overlay');
+        const inner   = document.getElementById('reveal-inner');
+        if (overlay) overlay.classList.add('visible');
+        setTimeout(() => { if (inner) inner.classList.add('visible'); }, 50);
+      }
+    </script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+  </body>
+</html>

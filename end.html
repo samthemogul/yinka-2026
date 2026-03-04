@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday, Yinka 🎀</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  
+<body>
+
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+    <audio id="bgMusic" loop preload="auto">
+      <source src="counting-my-blessings.mp3" type="audio/mpeg" />
+    </audio>
+    <!-- <button
+      class="music-btn"
+      id="musicBtn"
+      onclick="toggleMusic()"
+      title="Toggle music"
+    >
+      🔇
+    </button>
+    <div class="progress-bar" id="progressBar"></div> -->
+
+        <div class= active"screen" id="screen-end">
+      <canvas
+        id="confettiCanvas"
+        class="confetti"
+        style="
+          position: fixed;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+        "
+      ></canvas>
+      <div
+        class="end-content"
+        style="text-align: center; position: relative; z-index: 2"
+      >
+        <div style="font-size: 3rem; margin-bottom: 24px">🎂</div>
+        <h2 class="end-big">Happy <em>Birthday</em></h2>
+        <p class="end-sub">To the most extraordinary human being I know.</p>
+        <div class="hearts-row">🌸 💕 🌸 💕 🌸</div>
+        <div
+          style="
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px 32px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 380px;
+            margin: 0 auto 40px;
+          "
+        >
+          <p
+            style="
+              font-family: &quot;Cormorant Garamond&quot;, serif;
+              font-style: italic;
+              font-size: 1.2rem;
+              color: rgba(255, 255, 255, 0.8);
+              line-height: 1.8;
+            "
+          >
+            "Whatever she decides to do — she will excel. I have seen the
+            evidence with my own eyes."
+          </p>
+          <p
+            style="
+              font-size: 0.75rem;
+              color: rgba(255, 255, 255, 0.3);
+              margin-top: 12px;
+              letter-spacing: 0.1em;
+            "
+          >
+            — Sammy, witness, believer, and number 1 supporter 🌸
+          </p>
+        </div>
+        <button
+          class="btn btn-primary"
+          onclick="window.location.href='prologue.html'"
+          style="margin-right: 12px"
+        >
+          Start Over 🔁
+        </button>
+        <button class="btn btn-ghost" onclick="window.location.href='letter.html'">
+          ← The Letter
+        </button>
+      </div>
+    </div>
+
+    <script>
+
+      // ── NAVIGATION ───────────────────────────────────────────────────────
+      function goToScreen(screenId) {
+        const map = {
+          'screen-0':         'index.html',
+          'screen-prologue':  'prologue.html',
+          'screen-2021':      '2021.html',
+          'screen-2022':      '2022.html',
+          'screen-2023':      '2023.html',
+          'screen-2024':      '2024.html',
+          'screen-2025':      '2025.html',
+          'screen-who':       'who.html',
+          'screen-slideshow': 'slideshow.html',
+          'screen-fame':      'fame.html',
+          'screen-tommy':     'tommy.html',
+          'screen-bisola':    'bisola.html',
+          'screen-messages':  'sammy.html',
+          'screen-letter':    'letter.html',
+          'screen-end':       'end.html',
+        };
+        if (map[screenId]) window.location.href = map[screenId];
+      }
+
+
+      // ── BACKGROUND MUSIC ─────────────────────────────────────────────────
+      const audio = document.getElementById('bgMusic');
+      const musicBtn = document.getElementById('musicBtn');
+      let musicPlaying = false, userMutedMusic = false;
+
+      function setupGain() {
+        if (window._audioCtx || !audio) return;
+        try {
+          window._audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const src = window._audioCtx.createMediaElementSource(audio);
+          window._gainNode = window._audioCtx.createGain();
+          window._gainNode.gain.value = 0.07;
+          src.connect(window._gainNode);
+          window._gainNode.connect(window._audioCtx.destination);
+        } catch(e) {}
+      }
+      function startMusic() {
+        if (userMutedMusic || musicPlaying || !audio) return;
+        setupGain();
+        if (window._audioCtx && window._audioCtx.state === 'suspended') window._audioCtx.resume();
+        audio.volume = 1;
+        audio.play().then(() => {
+          musicPlaying = true;
+          if (window._gainNode) window._gainNode.gain.value = 0.07;
+          if (musicBtn) { musicBtn.textContent = '🎵'; musicBtn.classList.add('playing'); }
+        }).catch(() => {});
+      }
+      function toggleMusic() {
+        if (musicPlaying) {
+          audio.pause(); musicPlaying = false; userMutedMusic = true;
+          if (musicBtn) { musicBtn.textContent = '🔇'; musicBtn.classList.remove('playing'); }
+        } else {
+          userMutedMusic = false; startMusic();
+        }
+      }
+      document.addEventListener('click',      () => { if (!userMutedMusic) startMusic(); });
+      document.addEventListener('touchstart', () => { if (!userMutedMusic) startMusic(); }, { passive: true });
+
+
+      // ── CURSOR ───────────────────────────────────────────────────────────
+      const cursor = document.getElementById('cursor');
+      const ring   = document.getElementById('cursorRing');
+      if (cursor && ring) {
+        let mx=0,my=0,rx=0,ry=0;
+        document.addEventListener('mousemove', e => {
+          mx=e.clientX; my=e.clientY;
+          cursor.style.left = mx-6+'px'; cursor.style.top = my-6+'px';
+        });
+        (function animateRing(){
+          rx+=(mx-rx-18)*0.12; ry+=(my-ry-18)*0.12;
+          ring.style.left = rx+'px'; ring.style.top = ry+'px';
+          requestAnimationFrame(animateRing);
+        })();
+      }
+
+
+      // ── PETALS ───────────────────────────────────────────────────────────
+      function createPetal() {
+        const p = document.createElement('div');
+        p.className = 'petal';
+        p.style.left = Math.random()*100+'vw';
+        const dur = 6+Math.random()*8, delay = Math.random()*5;
+        p.style.animation = `petalFall ${dur}s ${delay}s linear infinite`;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), (dur+delay)*1000+1000);
+      }
+      setInterval(createPetal, 2000);
+
+
+      // ── CONFETTI ─────────────────────────────────────────────────────────
+      window.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('confettiCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const colors = ['#f48fb1','#e91e8c','#c2185b','#fce4ec','#d4a853','#fff'];
+        const particles = Array.from({length:120}, () => ({
+          x: Math.random()*canvas.width,
+          y: Math.random()*canvas.height - canvas.height,
+          r: 4+Math.random()*8,
+          color: colors[Math.floor(Math.random()*colors.length)],
+          vx:(Math.random()-.5)*3, vy:2+Math.random()*3,
+          angle:Math.random()*Math.PI*2, spin:(Math.random()-.5)*.15,
+        }));
+        (function draw() {
+          ctx.clearRect(0,0,canvas.width,canvas.height);
+          particles.forEach(p => {
+            ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.angle);
+            ctx.fillStyle=p.color; ctx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);
+            ctx.restore();
+            p.x+=p.vx; p.y+=p.vy; p.angle+=p.spin;
+            if (p.y>canvas.height){p.y=-10;p.x=Math.random()*canvas.width;}
+          });
+          requestAnimationFrame(draw);
+        })();
+      });
+
+    </script>
+  </body>
+</html>

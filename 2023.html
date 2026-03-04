@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday, Yinka 🎀</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  
+<body>
+
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+    <!-- <audio id="bgMusic" loop preload="auto">
+      <source src="counting-my-blessings.mp3" type="audio/mpeg" />
+    </audio> -->
+    <!-- <button
+      class="music-btn"
+      id="musicBtn"
+      onclick="toggleMusic()"
+      title="Toggle music"
+    >
+      🔇
+    </button>
+    <div class="progress-bar" id="progressBar"></div> -->
+
+        <div class="active screen chapter-screen" id="screen-2023">
+      <div class="chapter-header">
+        <div class="chapter-year">2023</div>
+        <div class="chapter-label">Chapter Three</div>
+        <h2 class="chapter-title">I Watched You <em>Shine</em></h2>
+      </div>
+      <div class="chapter-body">
+        <div class="memory-card revealed">
+          <div class="memory-tag">📺 Channels TV</div>
+          <p class="memory-text">
+            Of all the people you knew, Yinka,
+            <strong>you chose me to take to Channels TV.</strong><br /><br />I
+            watched you sit in that interview — composed, eloquent, absolutely
+            stunning. You made it look so easy. The head of the Fingreen program
+            even gave us money after 😂
+          </p>
+        </div>
+        <div class="memory-card revealed">
+          <div class="memory-tag">📸 That Day</div>
+          <div class="photo-slot">
+            <img src="channels.png" alt="Channels TV" />
+          </div>
+          <p class="photo-caption">
+            My first ever TV interview. Because of you. 🌟
+          </p>
+        </div>
+        <div class="memory-card revealed" id="mem-fashion">
+          <div class="memory-tag">👗 FSD & Fashion Design</div>
+          <p class="memory-text">
+            Financial enlightenment programs. Fashion design at FSD. First
+            Class. <strong>All at the same time.</strong
+            ><br /><br />Brooooooooo, you are not human. I have decided.
+          </p>
+        </div>
+        <div class="memory-card revealed" id="mem-certain">
+          <div class="memory-tag">💫 What I know for sure</div>
+          <p class="memory-text">
+            Whatever field you decide to put your mind to —
+            <strong>you will excel.</strong> I have seen the evidence with my
+            own eyes. This is not a prediction. This is a fact I have already
+            witnessed, mi amor❤️.
+          </p>
+        </div>
+        <div class="chapter-nav">
+          <button class="btn btn-primary" onclick="window.location.href='2024.html'">
+            2024 →</button
+          ><button class="btn btn-ghost" onclick="window.location.href='2022.html'">
+            ← 2022
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      // ============================
+      // YOUTUBE PLAYER SETUP
+      // ============================
+      // Load YouTube IFrame API
+      const ytScript = document.createElement("script");
+      ytScript.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(ytScript);
+
+      const ytPlayers = {};
+      const ytReadyCallbacks = {};
+
+      function onYouTubeIframeAPIReady() {
+        // Init all YT players once API is ready
+        document
+          .querySelectorAll(".yt-player, .yt-slide, .yt-opening, .yt-inline")
+          .forEach((el) => {
+            const id = el.id;
+            const videoId = el.dataset.videoId;
+            const onEndedFn = el.dataset.onended;
+            const mutedIds = new Set([]);
+            ytPlayers[id] = new YT.Player(id, {
+              videoId: videoId,
+              playerVars: {
+                autoplay: 0,
+                controls: 0,
+                disablekb: 1,
+                fs: 0,
+                iv_load_policy: 3,
+                loop: 0,
+                modestbranding: 1,
+                playsinline: 1,
+                rel: 0,
+                showinfo: 0,
+                color: "white",
+                mute: mutedIds.has(videoId) ? 1 : 0,
+                widget_referrer: window.location.href,
+                enablejsapi: 1,
+                origin: window.location.origin || "*",
+              },
+              events: {
+                onReady: (e) => {
+                  // Hide spinner
+                  const spinner =
+                    document.getElementById(
+                      id.replace("Video", "") + "-spinner",
+                    ) || document.getElementById(id + "-spinner");
+                  if (spinner) spinner.classList.add("hidden");
+                  // Force iframe to fill container and strip YT chrome
+                  const iframe = e.target.getIframe();
+                  if (iframe) {
+                    iframe.style.cssText =
+                      "position:absolute;top:0;left:0;width:100%;height:100%;border:none;";
+                    // Muted bg videos: also set transform to cover any letterboxing
+                    if (mutedIds.has(videoId)) {
+                      iframe.style.transform = "scale(1.01)";
+                      iframe.style.transformOrigin = "center center";
+                    }
+                  }
+                  if (ytReadyCallbacks[id]) ytReadyCallbacks[id](e);
+                },
+                onStateChange: (e) => {
+                  // Loop slideshow/bg videos; trigger reveal for message videos
+                  const isMuted = mutedIds.has(videoId);
+                  if (e.data === YT.PlayerState.ENDED) {
+                    if (isMuted) {
+                      // loop bg videos silently
+                      e.target.seekTo(0);
+                      e.target.playVideo();
+                    } else if (onEndedFn) {
+                      window[onEndedFn] &&
+                        window[onEndedFn](id.replace("Video", ""));
+                    }
+                  }
+                  // resume bg music when video ends
+                  if (
+                    e.data === YT.PlayerState.ENDED ||
+                    e.data === YT.PlayerState.PAUSED
+                  ) {
+                    resumeMusicIfNeeded();
+                  }
+                  // pause bg music when video plays
+                  if (e.data === YT.PlayerState.PLAYING) {
+                    if (audio && !audio.paused) audio.pause();
+                  }
+                },
+              },
+            });
+          });
+      }
+
+      function playYTVideo(playerId) {
+        const p = ytPlayers[playerId];
+        if (p && p.seekTo) {
+          p.seekTo(0);
+          p.playVideo();
+        }
+      }
+      function pauseAllYTVideos() {
+        Object.values(ytPlayers).forEach((p) => {
+          try {
+            p.pauseVideo();
+          } catch (e) {}
+        });
+      }
+
+      // pauseAllVideos already handles YT players directly
+
+      // ============================
+      // SCREEN ORDER
+      // ============================
+      const screenOrder = [
+        "screen-0",
+        "screen-prologue",
+        "screen-2021",
+        "screen-2022",
+        "screen-2023",
+        "screen-2024",
+        "screen-2025",
+        "screen-who",
+        "screen-slideshow",
+        "screen-fame",
+        "screen-tommy",
+        "screen-bisola",
+        "screen-messages",
+        "screen-letter",
+        "screen-end",
+      ];
+      let currentScreen = 'screen-2023';
+
+      // ============================
+      // REVEAL OVERLAY (unified)
+      // ============================
+      function triggerReveal(name) {
+        const overlay = document.getElementById(name + "-reveal");
+        const inner = document.getElementById(name + "-reveal-inner");
+        if (!overlay) return;
+        overlay.classList.add("visible");
+        setTimeout(() => {
+          if (inner) inner.classList.add("visible");
+        }, 50);
+      }
+      function resetReveal(name) {
+        const overlay = document.getElementById(name + "-reveal");
+        const inner = document.getElementById(name + "-reveal-inner");
+        if (overlay) overlay.classList.remove("visible");
+        if (inner) inner.classList.remove("visible");
+      }
+
+      // ============================
+      // MUSIC
+      // ============================
+      const audio = document.getElementById("bgMusic");
+      const musicBtn = document.getElementById("musicBtn");
+      let musicStarted = false,
+        musicPlaying = false,
+        userMutedMusic = false;
+
+      function startMusicOnFirstInteraction() {
+        if (userMutedMusic || musicPlaying) return;
+        if (!audio) return;
+        musicStarted = true;
+        
+        audio
+          .play()
+          .then(() => {
+            musicPlaying = true;
+            if (musicBtn) {
+              musicBtn.textContent = "🎵";
+              musicBtn.classList.add("playing");
+            }
+          })
+          .catch(() => {
+            musicStarted = false;
+          });
+          audio.volume = 0.05;
+      }
+      function toggleMusic() {
+        if (!musicStarted) {
+          startMusicOnFirstInteraction();
+          return;
+        }
+        if (musicPlaying) {
+          audio.pause();
+          musicPlaying = false;
+          userMutedMusic = true;
+          if (musicBtn) {
+            musicBtn.textContent = "🔇";
+            musicBtn.classList.remove("playing");
+          }
+        } else {
+          userMutedMusic = false;
+          audio.play();
+          musicPlaying = true;
+          if (musicBtn) {
+            musicBtn.textContent = "🎵";
+            musicBtn.classList.add("playing");
+          }
+        }
+      }
+
+      // Resume music on any interaction — covers taps on video play buttons
+      function resumeMusicIfNeeded() {
+        if (userMutedMusic) return;
+        if (!musicStarted) {
+          startMusicOnFirstInteraction();
+          return;
+        }
+        if (audio && audio.paused && musicPlaying) {
+          audio.play().catch(() => {});
+        }
+      }
+      document.addEventListener("click", resumeMusicIfNeeded);
+      document.addEventListener("touchstart", resumeMusicIfNeeded, {
+        passive: true,
+      });
+
+      // Auto-recover if browser pauses audio due to video playback interruption
+      if (audio) {
+        audio.addEventListener("pause", () => {
+          if (userMutedMusic) return;
+          setTimeout(() => {
+            if (audio.paused && musicPlaying && !userMutedMusic) {
+              audio.play().catch(() => {});
+            }
+          }, 1000);
+        });
+      }
+
+      // ============================
+      // VIDEO HELPERS
+      // ============================
+      function playVideo(id) {
+        const p = ytPlayers[id];
+        if (p && typeof p.seekTo === "function") {
+          try {
+            p.seekTo(0);
+            p.playVideo();
+          } catch (e) {}
+        }
+      }
+      function pauseAllVideos() {
+        // No raw <video> elements remain — all videos are YT embeds
+        // Pause all YT players
+        Object.values(ytPlayers).forEach((p) => {
+          try {
+            if (p && typeof p.pauseVideo === "function") p.pauseVideo();
+          } catch (e) {}
+        });
+      }
+      function toggleOpeningVideoPlay() {
+        const p = ytPlayers["openingVideo"],
+          btn = document.getElementById("openingPlayBtn");
+        if (!p || !btn) return;
+        const state = p.getPlayerState ? p.getPlayerState() : -1;
+        if (state === 1) {
+          p.pauseVideo();
+          btn.textContent = "▶";
+        } else {
+          p.playVideo();
+          btn.textContent = "⏸";
+        }
+      }
+      function toggle2001VideoPlay() {
+        const p = ytPlayers["video2001"],
+          btn = document.getElementById("play2001Btn");
+        if (!p || !btn) return;
+        const state = p.getPlayerState ? p.getPlayerState() : -1;
+        if (state === 1) {
+          p.pauseVideo();
+          btn.textContent = "▶";
+        } else {
+          p.playVideo();
+          btn.textContent = "⏸";
+        }
+      }
+      function toggleJJTVideoPlay() {
+        const p = ytPlayers["videoJJT"],
+          btn = document.getElementById("playJJTBtn");
+        if (!p || !btn) return;
+        const state = p.getPlayerState ? p.getPlayerState() : -1;
+        if (state === 1) {
+          p.pauseVideo();
+          btn.textContent = "▶";
+        } else {
+          p.playVideo();
+          btn.textContent = "⏸";
+        }
+      }
+
+      // ============================
+      // SCREEN NAVIGATION
+      // ============================
+      // Map each message screen to its video ID and reveal name
+      const msgScreens = {
+        "screen-fame": { vid: "fameVideo", reveal: "fame" },
+        "screen-tommy": { vid: "tommyVideo", reveal: "tommy" },
+        "screen-bisola": { vid: "bisolaVideo", reveal: "bisola" },
+        "screen-messages": { vid: "sammyVideo", reveal: "sammy" },
+      };
+
+      function goToScreen(screenId) {
+        switch(screenId) {
+        case 'screen-0': window.location.href = 'index.html'; return;
+        case 'screen-prologue': window.location.href = 'prologue.html'; return;
+        case 'screen-2021': window.location.href = '2021.html'; return;
+        case 'screen-2022': window.location.href = '2022.html'; return;
+        case 'screen-2023': window.location.href = '2023.html'; return;
+        case 'screen-2024': window.location.href = '2024.html'; return;
+        case 'screen-2025': window.location.href = '2025.html'; return;
+        case 'screen-who': window.location.href = 'who.html'; return;
+        case 'screen-slideshow': window.location.href = 'slideshow.html'; return;
+        case 'screen-fame': window.location.href = 'fame.html'; return;
+        case 'screen-tommy': window.location.href = 'tommy.html'; return;
+        case 'screen-bisola': window.location.href = 'bisola.html'; return;
+        case 'screen-messages': window.location.href = 'sammy.html'; return;
+        case 'screen-letter': window.location.href = 'letter.html'; return;
+        case 'screen-end': window.location.href = 'end.html'; return;
+        }
+      }
+      // ============================
+      // PROGRESS DOTS
+      // ============================
+      function updateProgress() {
+        const bar = document.getElementById("progressBar");
+        if (!bar) return;
+        bar.innerHTML = "";
+        const ci = screenOrder.indexOf(currentScreen);
+        screenOrder.forEach((id, i) => {
+          const d = document.createElement("div");
+          d.className = "dot" + (i === ci ? " active" : i < ci ? " done" : "");
+          bar.appendChild(d);
+        });
+      }
+      updateProgress();
+
+      // ============================
+      // LOCKED MEMORIES
+      // ============================
+      function unlockMemory(id) {
+        const card = document.getElementById(id);
+        if (!card || !card.classList.contains("locked")) return;
+        card.classList.remove("locked");
+        card.classList.add("unlocked", "revealed");
+        const sp = document.createElement("div");
+        sp.textContent = "✨";
+        sp.style.cssText =
+          "position:absolute;top:12px;right:12px;font-size:1.2rem;animation:sparkle 1s ease forwards";
+        card.appendChild(sp);
+        setTimeout(() => sp.remove(), 1500);
+      }
+
+      // ============================
+      // SLIDESHOW
+      // ============================
+      let currentSlideIndex = 0;
+
+      function initSlideshow() {
+        const slides = document.querySelectorAll("#screen-slideshow .slide");
+        const prog = document.getElementById("slideProgress");
+        prog.innerHTML = "";
+        slides.forEach((_, i) => {
+          const dot = document.createElement("div");
+          dot.className = "slide-dot" + (i === 0 ? " active-dot" : "");
+          const fill = document.createElement("div");
+          fill.className = "slide-dot-fill";
+          dot.appendChild(fill);
+          prog.appendChild(dot);
+        });
+        currentSlideIndex = 0;
+        slides.forEach((s) => s.classList.remove("active-slide", "exit-slide"));
+        slides[0].classList.add("active-slide");
+        const firstDiv = slides[0]
+          ? slides[0].querySelector("[data-video-id]")
+          : null;
+        if (firstDiv && ytPlayers[firstDiv.id]) {
+          try {
+            ytPlayers[firstDiv.id].playVideo();
+          } catch (e) {}
+        }
+      }
+
+      function goToSlide(index) {
+        const slides = document.querySelectorAll("#screen-slideshow .slide");
+        const dots = document.querySelectorAll("#slideProgress .slide-dot");
+        if (index < 0) return;
+        if (index >= slides.length) {
+          window.location.href='fame.html';
+          return;
+        }
+
+        const cvDiv = slides[currentSlideIndex]
+          ? slides[currentSlideIndex].querySelector("[data-video-id]")
+          : null;
+        if (cvDiv && ytPlayers[cvDiv.id]) {
+          try {
+            ytPlayers[cvDiv.id].pauseVideo();
+          } catch (e) {}
+        }
+        slides[currentSlideIndex].classList.remove("active-slide");
+        slides[currentSlideIndex].classList.add("exit-slide");
+        setTimeout(
+          () => slides[currentSlideIndex]?.classList.remove("exit-slide"),
+          1200,
+        );
+        if (dots[currentSlideIndex]) {
+          dots[currentSlideIndex].classList.remove("active-dot");
+          dots[currentSlideIndex].querySelector(".slide-dot-fill").style.width =
+            "0%";
+        }
+
+        currentSlideIndex = index;
+        slides[index].classList.add("active-slide");
+        if (dots[index]) dots[index].classList.add("active-dot");
+        const nextDiv = slides[index]
+          ? slides[index].querySelector("[data-video-id]")
+          : null;
+        if (nextDiv && ytPlayers[nextDiv.id]) {
+          try {
+            ytPlayers[nextDiv.id].seekTo(0);
+            ytPlayers[nextDiv.id].playVideo();
+          } catch (e) {}
+        }
+      }
+
+      function goToPrevSlide() {
+        goToSlide(currentSlideIndex - 1);
+      }
+      function goToNextSlide() {
+        const slides = document.querySelectorAll("#screen-slideshow .slide");
+        const slide = slides[currentSlideIndex];
+        if (slide && slide.dataset.next) {
+          window.location.href = slide.dataset.next;
+          return;
+        }
+        goToSlide(currentSlideIndex + 1);
+      }
+
+      // ============================
+      // CUSTOM CURSOR
+      // ============================
+      const cursor = document.getElementById("cursor");
+      const ring = document.getElementById("cursorRing");
+      let mx = 0,
+        my = 0,
+        rx = 0,
+        ry = 0;
+      document.addEventListener("mousemove", (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+        cursor.style.left = mx - 6 + "px";
+        cursor.style.top = my - 6 + "px";
+      });
+      (function animateRing() {
+        rx += (mx - rx - 18) * 0.12;
+        ry += (my - ry - 18) * 0.12;
+        ring.style.left = rx + "px";
+        ring.style.top = ry + "px";
+        requestAnimationFrame(animateRing);
+      })();
+      document.querySelectorAll("button,.video-wrapper").forEach((el) => {
+        el.addEventListener("mouseenter", () => {
+          cursor.style.transform = "scale(2)";
+          ring.style.transform = "scale(1.5)";
+        });
+        el.addEventListener("mouseleave", () => {
+          cursor.style.transform = "scale(1)";
+          ring.style.transform = "scale(1)";
+        });
+      });
+
+      // ============================
+      // FLOATING PETALS
+      // ============================
+      function createPetal() {
+        const p = document.createElement("div");
+        p.className = "petal";
+        p.style.left = Math.random() * 100 + "vw";
+        const dur = 6 + Math.random() * 8,
+          delay = Math.random() * 5;
+        p.style.animation = `petalFall ${dur}s ${delay}s linear infinite`;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), (dur + delay) * 1000 + 1000);
+      }
+      setInterval(createPetal, 2000);
+
+      // ============================
+      // CONFETTI
+      // ============================
+      function startConfetti() {
+        const canvas = document.getElementById("confettiCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const particles = Array.from({ length: 120 }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          r: 4 + Math.random() * 8,
+          color: [
+            "#f48fb1",
+            "#e91e8c",
+            "#c2185b",
+            "#fce4ec",
+            "#d4a853",
+            "#fff",
+          ][Math.floor(Math.random() * 6)],
+          vx: (Math.random() - 0.5) * 3,
+          vy: 2 + Math.random() * 3,
+          angle: Math.random() * Math.PI * 2,
+          spin: (Math.random() - 0.5) * 0.15,
+        }));
+        (function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles.forEach((p) => {
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.angle);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2);
+            ctx.restore();
+            p.x += p.vx;
+            p.y += p.vy;
+            p.angle += p.spin;
+            if (p.y > canvas.height) {
+              p.y = -10;
+              p.x = Math.random() * canvas.width;
+            }
+          });
+          requestAnimationFrame(draw);
+        })();
+      }
+
+      // ============================
+      // VIDEO PRELOADING
+      // ============================
+      // Preload message videos as soon as user reaches screen-who
+      // so by the time they hit slideshow → Fame, they're ready
+      const MSG_VIDEOS = ["tes-2.mp4", "tes-3.mp4", "tes-5.mp4", "tes-0.mp4"];
+      let preloadDone = false;
+      function preloadMessageVideos() {
+        if (preloadDone) return;
+        preloadDone = true;
+        MSG_VIDEOS.forEach((src) => {
+          const v = document.createElement("video");
+          v.src = src;
+          v.preload = "auto";
+          v.muted = true;
+          v.load();
+        });
+        console.log("[preload] message videos queued");
+      }
+
+      // ============================
+      // SPINNER HIDE LOGIC
+      // ============================
+      // When a message video can play, hide its spinner
+      const spinnerMap = {
+        fameVideo: "fame-spinner",
+        tommyVideo: "tommy-spinner",
+        bisolaVideo: "bisola-spinner",
+        sammyVideo: "sammy-spinner",
+      };
+      Object.entries(spinnerMap).forEach(([vidId, spinnerId]) => {
+        const v = document.getElementById(vidId);
+        const s = document.getElementById(spinnerId);
+        if (!v || !s) return;
+        const hideSpinner = () => s.classList.add("hidden");
+        if (v.readyState >= 3) {
+          hideSpinner();
+        } else {
+          v.addEventListener("canplay", hideSpinner, { once: true });
+        }
+        // Re-show spinner if video stalls mid-play
+        v.addEventListener("waiting", () => s.classList.remove("hidden"));
+        v.addEventListener("playing", () => s.classList.add("hidden"));
+      });
+    
+    </script>
+  </body>
+</html>
