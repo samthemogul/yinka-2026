@@ -10,16 +10,17 @@
   <body>
     <div class="cursor" id="cursor"></div>
     <div class="cursor-ring" id="cursorRing"></div>
-    <!-- <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop preload="auto">
       <source src="counting-my-blessings.mp3" type="audio/mpeg" />
     </audio>
-    <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Toggle music">🔇</button> -->
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Toggle music">🔇</button>
 
-    <div class="active" id="screen-fame">
+    <div class="screen active" id="screen-fame">
       <div class="slideshow-container">
-        <button class="slideshow-skip" onclick="triggerReveal()">Skip ›</button>
+        <button class="slideshow-skip" style="z-index:20;position:absolute;" onclick="triggerReveal()">Skip ›</button>
         <div class="slide active-slide">
           <div class="yt-cover" style="position:absolute;inset:0;width:100%;height:100%;overflow:hidden;">
+            <button id="btn_fameVideo" onclick="togglePlay()" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:30;background:rgba(194,24,91,0.85);border:none;border-radius:50%;width:72px;height:72px;font-size:1.8rem;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity 0.3s;">▶</button>
             <div id="fameVideo" class="yt-player" data-video-id="1Lfj_MJPTE4"
               style="position:absolute;inset:0;width:100%;height:100%;z-index:1;"></div>
           </div>
@@ -34,8 +35,8 @@
               </div>
             </div>
           </div>
-          <button class="slideshow-nav-button prev" onclick="window.location.href='slideshow.html'" style="z-index:5;">‹</button>
-          <button class="slideshow-nav-button next" onclick="triggerReveal()" style="z-index:5;">›</button>
+          <button class="slideshow-nav-button prev" style="z-index:20;position:absolute;" onclick="window.location.href='slideshow.html'">‹</button>
+          <button class="slideshow-nav-button next" style="z-index:20;position:absolute;" onclick="triggerReveal()">›</button>
           <div class="reveal-overlay" id="reveal-overlay">
             <div class="reveal-inner" id="reveal-inner">
               <div style="font-size:3.5rem;margin-bottom:20px;animation:heartbeat 1.5s ease-in-out infinite;">🎀</div>
@@ -108,6 +109,21 @@
       setInterval(createPetal, 2000);
 
       const ytPlayers = {};
+
+      let _playing = false;
+
+      function togglePlay() {
+        const p = ytPlayers['fameVideo'];
+        if (!p) return;
+        const btn = document.getElementById('btn_fameVideo');
+        if (!_playing) {
+          try { p.unMute(); p.setVolume(100); p.playVideo(); } catch(e) {}
+        } else {
+          try { p.pauseVideo(); } catch(e) {}
+          _playing = false;
+          if (btn) btn.style.opacity = '1';
+        }
+      }
 
       function onYouTubeIframeAPIReady() {
         if (!document.getElementById('fameVideo')) return;

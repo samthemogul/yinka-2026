@@ -30,6 +30,7 @@
 
         <div class= active"screen" id="screen-slideshow" >
       <div class="slideshow-container" id="slideshowContainer">
+        <button id="slidePlayBtn" onclick="toggleSlidePlay()" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:30;background:rgba(194,24,91,0.85);border:none;border-radius:50%;width:72px;height:72px;font-size:1.8rem;color:#fff;cursor:pointer;align-items:center;justify-content:center;transition:opacity 0.3s;">▶</button>
         <!-- Skip → goes to FAME (first message) -->
         <button class="slideshow-skip" onclick="window.location.href='fame.html'">
           Skip ›
@@ -245,10 +246,10 @@
           </div>
         </div>
 
-        <button class="slideshow-nav-button prev" onclick="goToPrevSlide()">
+        <button class="slideshow-nav-button prev" style="z-index:20;position:absolute;" onclick="goToPrevSlide()">
           ‹
         </button>
-        <button class="slideshow-nav-button next" onclick="goToNextSlide()">
+        <button class="slideshow-nav-button next" style="z-index:20;position:absolute;" onclick="goToNextSlide()">
           ›
         </button>
         <div class="slide-progress" id="slideProgress"></div>
@@ -347,8 +348,38 @@
         'yt-20',  // 17
       ];
 
+      let slidePlaying = false;
+
+      function updatePlayBtn() {
+        const btn = document.getElementById('slidePlayBtn');
+        if (!btn) return;
+        const hasVideo = !!SLIDE_VIDEOS[currentSlide];
+        btn.style.display = hasVideo ? 'flex' : 'none';
+        btn.style.opacity = (hasVideo && slidePlaying) ? '0' : '1';
+        btn.textContent = '▶';
+      }
+
+      function toggleSlidePlay() {
+        const elId = SLIDE_VIDEOS[currentSlide];
+        if (!elId) return;
+        const p = ytPlayers[elId];
+        if (!p) return;
+        const btn = document.getElementById('slidePlayBtn');
+        if (!slidePlaying) {
+          try { p.unMute(); p.setVolume(100); p.playVideo(); } catch(e) {}
+          slidePlaying = true;
+          if (btn) btn.style.opacity = '0';
+        } else {
+          try { p.pauseVideo(); } catch(e) {}
+          slidePlaying = false;
+          if (btn) btn.style.opacity = '1';
+        }
+      }
+
       function playSlide(index) {
         const elId = SLIDE_VIDEOS[index];
+        slidePlaying = false;
+        updatePlayBtn();
         if (!elId) return;
         const p = ytPlayers[elId];
         if (!p) return;
@@ -360,6 +391,7 @@
         const p = ytPlayers[elId];
         if (!p) return;
         try { p.mute(); p.pauseVideo(); } catch(e) {}
+        slidePlaying = false;
       }
 
       function goToSlide(index) {
@@ -380,6 +412,7 @@
         if (dots[index]) dots[index].classList.add('active-dot');
 
         playSlide(currentSlide);
+        updatePlayBtn();
       }
 
       function goToPrev() { goToSlide(currentSlide - 1); }
@@ -394,6 +427,7 @@
 
       // Build progress dots
       window.addEventListener('DOMContentLoaded', () => {
+        updatePlayBtn();
         const prog = document.getElementById('slideProgress');
         if (prog) {
           document.querySelectorAll('.slide').forEach((_, i) => {
@@ -446,12 +480,22 @@
                 // Autoplay first slide as soon as yt-1 is ready
                 if (elId === 'yt-1') {
                   playSlide(0);
+                  updatePlayBtn();
                 }
               },
               onStateChange: (e) => {
                 if (e.data === YT.PlayerState.ENDED) {
-                  // Loop the current video
                   try { e.target.seekTo(0); e.target.playVideo(); } catch(ex) {}
+                }
+                if (e.data === YT.PlayerState.PLAYING) {
+                  slidePlaying = true;
+                  const btn = document.getElementById('slidePlayBtn');
+                  if (btn) btn.style.opacity = '0';
+                }
+                if (e.data === YT.PlayerState.PAUSED) {
+                  slidePlaying = false;
+                  const btn = document.getElementById('slidePlayBtn');
+                  if (btn) btn.style.opacity = '1';
                 }
               },
             },
